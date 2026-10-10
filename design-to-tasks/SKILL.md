@@ -1,0 +1,110 @@
+---
+name: design-to-tasks
+description: Guide a rigid three-phase project refinement (Idea -> Architecture -> Tasks), debating each phase /grill-me style, gating advancement behind explicit approval, and generating docs/DESIGN.md, docs/ARCHITECTURE.md, and a tool-agnostic docs/TASKS.md.
+---
+
+# design-to-tasks
+
+Turn a raw idea into an implementation-ready plan through three strictly gated phases.
+Each phase runs a deep, adversarial debate before any document is written, and no phase
+starts until the previous phase's document is approved by the user.
+
+## When to use
+
+Use this skill when the user wants to refine a new idea, feature, or project end-to-end
+into planning documents, or explicitly asks for `design-to-tasks`. It produces three
+Markdown documents in the target project's `docs/` folder:
+
+1. `docs/DESIGN.md` — the idea, problem, and business-level decisions.
+2. `docs/ARCHITECTURE.md` — the technical solution (C4 + ADRs).
+3. `docs/TASKS.md` — the execution plan, tool-agnostic.
+
+## Language rule
+
+- Conduct the skill's own reasoning, prompts, and this workflow in **English**.
+- Write the **generated documents in the user's current conversation language**.
+
+## Templates
+
+Fill the templates in this skill's `templates/` folder, do not invent structure ad hoc:
+
+- `templates/DESIGN.md`
+- `templates/ARCHITECTURE.md`
+- `templates/TASKS.md`
+
+Copy the relevant template, replace every `{{placeholder}}` and `TODO`, remove sections
+that genuinely do not apply, and write the result to the project's `docs/` folder
+(create `docs/` if it does not exist).
+
+## Operating rules (apply to all phases)
+
+- **Rigid gate.** Phase N+1 is blocked until Phase N's document is drafted, reviewed, and
+  **explicitly approved** by the user. Never skip a phase. Never draft two phases at once.
+- **Debate before drafting.** Before writing any document, run a `/grill-me`-style
+  interrogation (see the `/grill-me` workflow): interview the user relentlessly, resolve
+  every branch of the decision tree, surface trade-offs, and challenge weak assumptions.
+  Only draft the document once the tree is resolved.
+- **Ground every claim.** Read the codebase, inputs, and prior docs before asserting
+  anything. Flag assumptions explicitly. Never invent facts, APIs, or constraints.
+- **Consistency.** Earlier documents are the source of truth. Later phases must not
+  contradict earlier ones; if new information invalidates a decision, go back, update the
+  earlier doc, and re-confirm before proceeding.
+- **Diagrams.** All diagrams are **Mermaid**.
+
+## Phase 1 — Idea -> `docs/DESIGN.md`
+
+1. **Debate (grill-me).** Interrogate until these are resolved:
+   - Problem and context; who is affected and why it matters now.
+   - Goals and explicit non-goals.
+   - Glossary of domain terms.
+   - Findings/evidence backing the framing.
+   - Key business-level decisions and the alternatives considered.
+   - MVP scope vs. later phases.
+   - Risks and success metrics.
+2. **Gate.** Present a concise summary of the resolved decisions and ask for explicit
+   approval to write the document.
+3. **Write.** Fill `templates/DESIGN.md` and write `docs/DESIGN.md`.
+4. **Stop.** Do not start Phase 2 until the user approves `docs/DESIGN.md`.
+
+## Phase 2 — Architecture -> `docs/ARCHITECTURE.md`
+
+Precondition: `docs/DESIGN.md` approved.
+
+1. **Debate (grill-me).** Interrogate until these are resolved:
+   - C4 levels (Context, Containers, Components) and system boundaries.
+   - Technology choices and their justification.
+   - ADRs: Context -> Decision -> Consequences -> Impact on MVP.
+   - Deployment topology, environments, and secrets handling.
+   - Cross-cutting concerns: observability, resilience, security.
+2. **Gate.** Summarize and request explicit approval.
+3. **Write.** Fill `templates/ARCHITECTURE.md` (Mermaid diagrams) and write
+   `docs/ARCHITECTURE.md`.
+4. **Stop.** Do not start Phase 3 until the user approves `docs/ARCHITECTURE.md`.
+
+## Phase 3 — Tasks -> `docs/TASKS.md`
+
+Precondition: `docs/ARCHITECTURE.md` approved.
+
+1. **Debate (grill-me).** Interrogate until these are resolved:
+   - Slicing into MVP + Phases (A/B/C...).
+   - Task breakdown, dependencies, and acceptance criteria.
+   - Sequencing and critical path.
+   - Per-task risk.
+2. **Gate.** Summarize and request explicit approval.
+3. **Write.** Fill `templates/TASKS.md` and write `docs/TASKS.md`.
+
+### Tool-agnostic requirement (critical)
+
+The core of `docs/TASKS.md` MUST stay agnostic:
+
+- No tool names, external issue keys, custom fields, or board/sprint/transition concepts.
+- Use local, stable task IDs (`T1`, `A1`, `B2`, ...), never external tracker keys.
+- Keep every tracker bridge inside the clearly-labeled optional export appendix at the end
+  of the template. A separate tool-specific skill (e.g. a Jira skill) may later materialize
+  those tasks; do not couple the document to it.
+
+## Completion & handoff
+
+Recap the three approved documents and suggest next actions (for example, starting
+implementation via the `software-engineer` skill). Confirm nothing in the core `TASKS.md`
+leaked tool-specific terminology.

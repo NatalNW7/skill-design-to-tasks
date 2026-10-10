@@ -1,0 +1,41 @@
+{
+  "name": "skill-design-to-tasks",
+  "version": "1.0.0",
+  "description": "Agent skill for rigid three-phase project refinement (Idea -> Architecture -> Tasks)",
+  "main": "lib/installer.js",
+  "bin": {
+    "skill-design-to-tasks": "./bin/cli.js",
+    "design-to-tasks": "./bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "design-to-tasks",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test --experimental-test-coverage"
+  },
+  "keywords": [
+    "agent-skills",
+    "skills",
+    "antigravity",
+    "claude-code",
+    "cursor",
+    "design-to-tasks"
+  ],
+  "author": "NatalNW7",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NatalNW7/skill-design-to-tasks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NatalNW7/skill-design-to-tasks/issues"
+  },
+  "homepage": "https://github.com/NatalNW7/skill-design-to-tasks#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

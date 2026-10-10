@@ -1,0 +1,5 @@
+node_modules/
+design-to-tasks.zip
+coverage/
+.DS_Store
+*.log
