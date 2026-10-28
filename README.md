@@ -28,7 +28,8 @@ A skill `design-to-tasks` estabelece um fluxo rigoroso de refinamento de projeto
 
 1. **`docs/DESIGN.md`** — Problema, contexto, objetivos e decisões de negócio.
 2. **`docs/ARCHITECTURE.md`** — Solução técnica com arquitetura C4 (Contexto, Contêineres, Componentes, Implantação) e ADRs.
-3. **`docs/TASKS.md`** — Plano de execução com tarefas acionáveis, ordenadas por dependência, estritamente agnóstico a ferramentas de tracking.
+3. **`docs/TASKS.md`** — Plano orquestrador de execução com ciclo de vida de status (`Todo`, `Doing`, `Done`), ondas de concorrência/paralelismo e grafo de dependências.
+4. **`docs/tasks/<ID>-<slug>.md`** — Tarefas e bugs versionados individualmente no repositório com Contexto, Soluções Propostas, Critérios de Aceite (e Passos de Reprodução para bugs), ideal para quem desenvolve de forma autônoma sem ferramentas externas como Jira.
 
 ### Regras Operacionais Principais
 
@@ -122,7 +123,7 @@ Inicie uma conversa ou solicite no prompt:
 Ou utilize a menção da skill conforme o ambiente. O agente seguirá os 3 passos:
 1. Conduzirá o debate da **Fase 1** e aguardará sua aprovação antes de escrever `docs/DESIGN.md`.
 2. Conduzirá o debate da **Fase 2** e aguardará sua aprovação antes de escrever `docs/ARCHITECTURE.md`.
-3. Conduzirá o debate da **Fase 3** e gerará o `docs/TASKS.md`.
+3. Conduzirá o debate da **Fase 3** e gerará o orquestrador `docs/TASKS.md` junto com as tarefas versionadas em `docs/tasks/<ID>-<slug>.md`.
 
 ### No Cursor / Claude Code / Windsurf
 Como o arquivo `SKILL.md` fica localizado em `./.agents/skills/design-to-tasks/SKILL.md` ou nos diretórios padrão do agente, o assistente reconhecerá as instruções automaticamente quando o contexto ou o prompt mencionar o fluxo `design-to-tasks`.
@@ -144,7 +145,9 @@ skill-design-to-tasks/
 │   └── templates/              # Templates padronizados em Markdown
 │       ├── DESIGN.md           # Template da Fase 1 (Ideia/Design)
 │       ├── ARCHITECTURE.md     # Template da Fase 2 (Arquitetura C4 + ADRs)
-│       └── TASKS.md            # Template da Fase 3 (Tarefas agnósticas)
+│       ├── TASKS.md            # Template da Fase 3 (Painel orquestrador de status e ondas)
+│       ├── TASK.md             # Template da Fase 3 (Documento de tarefa/feature)
+│       └── TASK_BUG.md         # Template da Fase 3 (Documento especializado de bug)
 ├── package.json                # Manifesto npm com comandos bin e scripts
 ├── LICENSE                     # Licença MIT
 └── README.md                   # Documentação do projeto
